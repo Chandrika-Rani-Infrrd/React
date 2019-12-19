@@ -6,50 +6,74 @@ const cardData=[{name:"chandu",company:"abc"},
                {name:"chandrika",company:"pqr"}];
 
 class Card extends React.Component{
-  render(){
-    const profileData=this.props;
-    return (
-      <div className="profile">
-        <div className="img"></div>
-        <div className="personalInfo" style={{ marginLeft:"10px"}}>
-          <div className="name">{profileData.name}</div>
-          <div className="company">{profileData.company}</div>
-        </div>
-        </div>
-      );
+render(){
+const profileData=this.props;
+  return (
+  <div className="profile">
+  <div className="img"></div>
+  <div className="personalInfo" style={{ marginLeft:"10px"}}>
+  <div className="name">{profileData.name}</div>
+  <div className="company">{profileData.company}</div>
+  </div>
+  </div>
+   );
   }
 }
 
 const CardList=(props)=>{
   return(
   <div className="card">
+      <p>Already exist </p>
       {props.profileData.map(profileData=><Card {...profileData}/>)}
    </div>);
 };
 
 class Form extends React.Component{
-  state={userName:''}
-  handler=(event)=>{
+  constructor(props){
+    super(props);
+   this.state={ item:[ ] , userName:''};
+    this.handleSubmit=this.handleSubmit.bind(this);
+  }
+ handleSubmit(event){
     event.preventDefault();
-    console.log(this.state.userName);
+   const newItem={
+      userName:this.state.userName
+      };
+  this.setState(state=>({
+      item:this.state.item.concat(newItem),
+      userName:''
+    }));
+     }
+     render(){
+      return(
+        <form onSubmit={this.handleSubmit}>
+          <div className="form">
+          <input className="text" 
+          value={this.state.userName}
+          onChange={event=>this.setState({userName:event.target.value})}
+                    type="text" placeHolder="Add Name" required/>
+          <button>Add Name</button>
+             <UserList item={this.state.item}/>
+          </div>
+          </form>
+      );
+    }
   }
-  render(){
-    return(
-      <div className="Form">
-      <form onSubmit={this.handler}>
-        <div className="form">
-        <input className="text" 
-        value={this.state.userName}
-        onChange={event=>this.setState({userName:event.target.value})}
-                  type="text" placeHolder="Search Name" required/>
-        <button>Add Name</button>
-        </div>
-        </form>
-        </div>
-    );
+  class UserList extends React.Component{
+    render(){
+      return(
+      <ul>
+          <div>
+          <p> New list</p>
+          {this.props.item.map(item=>(
+          <li className="newlist">{<div className="img"></div>}{item.userName }</li>
+          ))
+          }
+          </div>
+      </ul>
+          );
+    }
   }
-}
-
 class App extends React.Component{
   render(){
     return (
